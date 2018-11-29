@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { createPost } from '../actions/index';
+import { createPost, deletePost } from '../actions/index';
 
 class newPost extends Component {
     renderField(field){
@@ -29,19 +29,18 @@ class newPost extends Component {
         )
     }
 
-    onFormSubmit(ev){
-        ev.preventDefault()
+    onSubmit(values){
+        this.props.createPost(values, ()=>{
+            this.props.history.push('/')
+        })
     }
 
-    onSubmit(values){
-        values.preventDefault()
-        this.props.createPost(values)
-    }
+ 
 
     render(){
         const { handleSubmit } = this.props;
         return(
-            <form onSubmit={this.onSubmit.bind(this)}>
+            <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
                 <Field name='title' label={'Title'} component={this.renderField} />
                 <Field name='categories'  label={'Categories'} component={this.renderField} />
                 <Field name='content'  label={'Post Body'} component={this.renderField} />
